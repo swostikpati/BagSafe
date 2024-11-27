@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Code Generator</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f2f5;
+      }
+      .container {
+        text-align: center;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+      h1 {
+        color: #333;
+      }
+      input[type="text"] {
+        padding: 10px;
+        font-size: 1em;
+        width: 100%;
+        max-width: 300px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 1em;
+        border: none;
+        background-color: #4caf50;
+        color: #fff;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      #qrCode {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Generate Your QR Code</h1>
+      <input type="text" id="nameInput" placeholder="Enter your name" />
+      <button onclick="generateQRCode()">Generate QR Code</button>
+      <div id="qrCode"></div>
+    </div>
+
+    <script>
+      async function generateQRCode() {
+        const name = document.getElementById("nameInput").value;
+        if (!name) {
+          alert("Please enter your name");
+          return;
+        }
+
+        const response = await fetch("/generate-qr", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name }),
+        });
+
+        const data = await response.json();
+        if (data.qrImage) {
+          document.getElementById("qrCode").innerHTML = `
+                    <h3>Your QR Code:</h3>
+                    <img src="${data.qrImage}" alt="QR Code" />
+                `;
+        } else {
+          alert("Failed to generate QR Code. Please try again.");
+        }
+      }
+    </script>
+  </body>
+</html>
