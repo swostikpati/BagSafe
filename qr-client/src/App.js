@@ -25,7 +25,7 @@ function App() {
   const handleSubmit = () => {
     if (name && qrData) {
       axios
-        .post("http://localhost:5000/verify-qr", { name, qrData })
+        .post("https://bag-safe-server.vercel.app/verify-qr", { name, qrData })
         .then((res) => setMessage(res.data.message))
         .catch(() => setMessage("Error during verification."));
       setScanStatus(""); // Clear scan status after submission
